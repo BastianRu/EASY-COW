@@ -15,21 +15,18 @@ Este proyecto está organizado en 3 ramas principales:
 
 El proyecto incluye 3 carpetas correspondientes a las ramas:
 
-- `documentacion/` - Carpeta vacía para documentación
-- `fuente/` - Carpeta vacía para código fuente  
-- `pruebas/` - Carpeta vacía para pruebas
+- `documentacion/` - Carpeta para documentación
+- `fuente/` - Carpeta para código fuente  
+- `pruebas/` - Carpeta para pruebas
 
-## Estado Actual
-
-Las carpetas están vacías y listas para recibir contenido cuando se decida el lenguaje del proyecto.
 
 ## Comandos para trabajar con las ramas
 
 Para cambiar entre ramas:
 ```bash
-git checkout documentacion
-git checkout fuente
-git checkout pruebas
+git switch documentacion
+git switch pruebas
+git switch fuente
 ```
 
 Para subir las ramas al repositorio remoto:
