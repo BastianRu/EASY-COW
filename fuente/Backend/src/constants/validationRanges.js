@@ -35,6 +35,10 @@ const VALIDATION_RANGES = {
     min: 1,
     max: 365,
   },
+  PRECIO_COMPRA_VENTA: {
+    min: 1,
+    max: 1000000000,
+  },
 };
 
 module.exports = VALIDATION_RANGES;

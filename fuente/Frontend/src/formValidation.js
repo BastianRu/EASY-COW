@@ -8,6 +8,7 @@ export const VALIDATION_RANGES = {
     CANTIDAD_ALIMENTO_KG_DIA: { min: 0.1, max: 100 },
     TEMPERATURA_C: { min: 35, max: 43 },
     DURACION_TRATAMIENTO_DIAS: { min: 1, max: 365 },
+    PRECIO_COMPRA_VENTA: { min: 1, max: 1000000000 },
 };
 
 export function isFutureDate(value) {

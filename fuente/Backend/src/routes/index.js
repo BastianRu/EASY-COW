@@ -6,6 +6,9 @@ const tratamientosRoutes = require("./tratamientos.routes");
 const dietasRoutes = require("./dietas.routes");
 const dashboardRoutes = require("./dashboard.routes");
 const produccionRoutes = require("./produccion.routes");
+const comprasRoutes = require("./compras.routes");
+const ventasRoutes = require("./ventas.routes");
+const reportesRoutes = require("./reportes.routes");
 const { authenticate } = require("../middleware/auth.middleware");
 
 const router = Router();
@@ -18,5 +21,8 @@ router.use("/tratamientos", tratamientosRoutes);
 router.use("/dietas", dietasRoutes);
 router.use("/dashboard", dashboardRoutes);
 router.use("/produccion", produccionRoutes);
+router.use("/compras", comprasRoutes);
+router.use("/ventas", ventasRoutes);
+router.use("/reportes", reportesRoutes);
 
 module.exports = router;

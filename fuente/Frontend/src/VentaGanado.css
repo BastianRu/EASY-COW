@@ -1,0 +1,9 @@
+.venta-ganado .contenedor {
+    margin-left: auto;
+    margin-right: auto;
+    width: min(960px, calc(100% - 2rem)) !important;
+}
+
+.venta-ganado {
+    padding-bottom: 2rem;
+}

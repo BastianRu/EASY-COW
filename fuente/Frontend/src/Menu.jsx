@@ -10,6 +10,8 @@ import imagenP3 from '../images/warning.svg'
 import imagenP4 from '../images/pill.svg'
 import imagenP5 from '../images/apple.svg'
 import imagenProductivo from '../images/productivo.svg'
+import imagenClipboardBlack from '../images/clipboard_Black.svg'
+import imagenPulseBlack from '../images/pulseLine_black.svg'
 import './Menu.css'
 import { useNavigate } from 'react-router-dom'
 import TituloPestana from "../modules/tituloPestana.jsx"
@@ -114,6 +116,32 @@ function Menu (){
                             <img src={imagenP2} alt="reload"/>
                         </div>
                         Análisis de Rentabilidad
+                    </Boton>
+                </Contenedor>
+                <Contenedor width="auto" height="auto">
+                        <TituloPestana
+                            imagen={imagenPulseBlack}
+                            textoGrande="Gestión Administrativa"
+                            textoPequeno="Registre compras, ventas y genere reportes de la finca"
+                            color="rgba(245, 158, 11, 0.2)"
+                        />
+                    <Boton onClick={()=>Navigate('/CompraGanado')}>
+                        <div className="imagenPeque">
+                            <img src={imagenP1} alt="plus"/>
+                        </div>
+                        Compra de Ganado
+                    </Boton>
+                    <Boton onClick={()=>Navigate('/VentaGanado')}>
+                        <div className="imagenPeque">
+                            <img src={imagenPulseBlack} alt="venta"/>
+                        </div>
+                        Venta de Ganado
+                    </Boton>
+                    <Boton onClick={()=>Navigate('/Reportes')}>
+                        <div className="imagenPeque">
+                            <img src={imagenClipboardBlack} alt="reportes"/>
+                        </div>
+                        Reportes y Consultas
                     </Boton>
                 </Contenedor>
             </div>

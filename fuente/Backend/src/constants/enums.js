@@ -28,6 +28,8 @@ const OBJETIVOS_DIETA = ["mantenimiento", "engorde", "produccion_leche", "gestac
 
 const ROLES_USUARIO = ["admin", "usuario", "veterinario"];
 
+const FORMAS_PAGO = ["efectivo", "transferencia", "cheque", "credito"];
+
 module.exports = {
   RAZAS,
   SEXOS,
@@ -43,4 +45,5 @@ module.exports = {
   FRECUENCIAS_ALIMENTACION,
   OBJETIVOS_DIETA,
   ROLES_USUARIO,
+  FORMAS_PAGO,
 };

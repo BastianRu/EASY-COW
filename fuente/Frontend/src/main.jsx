@@ -11,6 +11,9 @@ import DietasSuplementos from './DietasSuplementos.jsx'
 import RegistroProduccion from './RegistroProduccion.jsx'
 import AnalisisProductivo from './AnalisisProductivo.jsx'
 import AnalisisRentabilidad from './AnalisisRentabilidad.jsx'
+import CompraGanado from './CompraGanado.jsx'
+import VentaGanado from './VentaGanado.jsx'
+import Reportes from './Reportes.jsx'
 /* Styles */
 import './styles/text.css'
 import './styles/subtext.css'
@@ -31,6 +34,9 @@ createRoot(document.getElementById('root')).render(
         <Route path='/RegistroProduccion' element={<RegistroProduccion/>}/>
         <Route path='/AnalisisProductivo' element={<AnalisisProductivo/>}/>
         <Route path='/AnalisisRentabilidad' element={<AnalisisRentabilidad/>}/>
+        <Route path='/CompraGanado' element={<CompraGanado/>}/>
+        <Route path='/VentaGanado' element={<VentaGanado/>}/>
+        <Route path='/Reportes' element={<Reportes/>}/>
       </Routes>
     </BrowserRouter>
   </StrictMode>
