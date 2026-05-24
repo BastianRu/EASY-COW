@@ -1,6 +1,7 @@
 .historial-sanitario .contenedor {
     margin: auto;
     width: min(1100px, calc(100% - 2rem)) !important;
+    color: #111827;
 }
 
 /* ── Buscador ── */
@@ -27,8 +28,8 @@
 
 /* ── Animal info card ── */
 .animal-info-card {
-    background: rgba(99, 102, 241, 0.08);
-    border: 1px solid rgba(99, 102, 241, 0.25);
+    background: #eef2ff;
+    border: 1px solid rgba(99, 102, 241, 0.28);
     border-radius: 12px;
     padding: 1.25rem 1.5rem;
 }
@@ -36,7 +37,7 @@
 .animal-info-titulo {
     font-size: 1rem;
     font-weight: 600;
-    color: rgba(99, 102, 241, 0.9);
+    color: #4f46e5;
     margin: 0 0 1rem 0;
 }
 
@@ -57,13 +58,13 @@
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    color: var(--text-secondary, #888);
+    color: #6b7280;
 }
 
 .campo-valor {
     font-size: 0.9rem;
     font-weight: 500;
-    color: var(--text-primary, #eee);
+    color: #111827;
 }
 
 .estado-badge {
@@ -72,7 +73,7 @@
     border-radius: 999px;
     font-size: 0.82rem;
     font-weight: 600;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.9);
 }
 
 .estado-activo  { color: #4ade80; background: rgba(74, 222, 128, 0.12); }
@@ -81,8 +82,8 @@
 
 /* ── Secciones ── */
 .seccion-historial {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
     border-radius: 12px;
     padding: 1.25rem 1.5rem;
 }
@@ -91,17 +92,17 @@
     font-size: 0.95rem;
     font-weight: 600;
     margin: 0 0 1rem 0;
-    color: var(--text-primary, #eee);
+    color: #111827;
 }
 
 .seccion-cantidad {
     font-weight: 400;
-    color: var(--text-secondary, #888);
+    color: #6b7280;
     font-size: 0.85rem;
 }
 
 .sin-registros {
-    color: var(--text-secondary, #888);
+    color: #6b7280;
     font-size: 0.875rem;
     margin: 0;
     padding: 0.25rem 0;
@@ -127,15 +128,15 @@
     font-size: 0.78rem;
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    color: var(--text-secondary, #aaa);
+    color: #6b7280;
     white-space: nowrap;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid #e5e7eb;
 }
 
 .tabla-historial td {
     padding: 8px 12px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    color: var(--text-primary, #ddd);
+    border-bottom: 1px solid #f3f4f6;
+    color: #111827;
     vertical-align: top;
 }
 
@@ -144,7 +145,7 @@
 }
 
 .tabla-historial tbody tr:hover td {
-    background: rgba(255, 255, 255, 0.03);
+    background: #f9fafb;
 }
 
 /* ── Toast ── */
