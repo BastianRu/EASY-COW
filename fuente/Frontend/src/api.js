@@ -1,11 +1,19 @@
-const RAW_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
+const RAW_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://31.97.128.204:3000/api';
 const BASE_URL = RAW_BASE_URL.replace(/\/+$/, '');
+
+function resolveBaseUrl() {
+    if (BASE_URL.startsWith('http://') || BASE_URL.startsWith('https://')) {
+        return BASE_URL;
+    }
+
+    const backendOrigin = import.meta.env.VITE_API_PROXY_TARGET || 'http://31.97.128.204:3000';
+    const normalizedOrigin = backendOrigin.replace(/\/+$/, '');
+    return `${normalizedOrigin}${BASE_URL.startsWith('/') ? BASE_URL : `/${BASE_URL}`}`;
+}
 
 function getApiUrl(endpoint, params = {}) {
     const normalizedEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
-    const base = BASE_URL.startsWith('http')
-        ? BASE_URL
-        : `${window.location.origin}${BASE_URL}`;
+    const base = resolveBaseUrl();
     const url = new URL(`${base}${normalizedEndpoint}`);
 
     Object.keys(params).forEach((key) => {
