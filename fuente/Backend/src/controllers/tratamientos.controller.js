@@ -127,8 +127,13 @@ const listTratamientos = asyncHandler(async (req, res) => {
     id: item._id,
     fechaInicio: item.fechaInicio,
     medicamento: item.medicamento,
+    dosis: item.dosis,
+    frecuencia: item.frecuencia,
     duracion: item.duracion,
+    viaAdministracion: item.viaAdministracion,
+    veterinario: item.veterinario,
     estadoTratamiento: item.estadoTratamiento,
+    observaciones: item.observaciones,
     animal: item.animalId
       ? {
           id: item.animalId._id,

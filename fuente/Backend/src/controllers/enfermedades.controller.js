@@ -76,8 +76,11 @@ const listEnfermedades = asyncHandler(async (req, res) => {
     id: item._id,
     fechaDeteccion: item.fechaDeteccion,
     enfermedad: item.enfermedad,
+    sintomas: item.sintomas,
+    temperatura: item.temperatura,
     estadoGeneral: item.estadoGeneral,
     estadoActual: item.estadoActual,
+    observaciones: item.observaciones,
     animal: item.animalId
       ? {
           id: item.animalId._id,
