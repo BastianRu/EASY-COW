@@ -144,6 +144,26 @@ function Menu (){
                         Reportes y Consultas
                     </Boton>
                 </Contenedor>
+                <Contenedor width="auto" height="auto">
+                        <TituloPestana
+                            imagen={imagenP4}
+                            textoGrande="Gestión de Medicamentos"
+                            textoPequeno="Registre medicamentos y consulte el historial sanitario del ganado"
+                            color="rgba(168, 85, 247, 0.2)"
+                        />
+                    <Boton onClick={()=>Navigate('/RegistroMedicamentos')}>
+                        <div className="imagenPeque">
+                            <img src={imagenP1} alt="plus"/>
+                        </div>
+                        Registro de Medicamentos
+                    </Boton>
+                    <Boton onClick={()=>Navigate('/HistorialSanitario')}>
+                        <div className="imagenPeque">
+                            <img src={imagenPulseBlack} alt="historial"/>
+                        </div>
+                        Historial Sanitario
+                    </Boton>
+                </Contenedor>
             </div>
             <div className="menu-container" id="estadisticas">
                 <Contenedor width="auto" height="auto">

@@ -14,6 +14,8 @@ import AnalisisRentabilidad from './AnalisisRentabilidad.jsx'
 import CompraGanado from './CompraGanado.jsx'
 import VentaGanado from './VentaGanado.jsx'
 import Reportes from './Reportes.jsx'
+import RegistroMedicamentos from './RegistroMedicamentos.jsx'
+import HistorialSanitario from './HistorialSanitario.jsx'
 /* Styles */
 import './styles/text.css'
 import './styles/subtext.css'
@@ -37,6 +39,8 @@ createRoot(document.getElementById('root')).render(
         <Route path='/CompraGanado' element={<CompraGanado/>}/>
         <Route path='/VentaGanado' element={<VentaGanado/>}/>
         <Route path='/Reportes' element={<Reportes/>}/>
+        <Route path='/RegistroMedicamentos' element={<RegistroMedicamentos/>}/>
+        <Route path='/HistorialSanitario' element={<HistorialSanitario/>}/>
       </Routes>
     </BrowserRouter>
   </StrictMode>

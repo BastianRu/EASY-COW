@@ -1,0 +1,25 @@
+.registro-medicamentos .contenedor {
+    margin: auto;
+    width: min(960px, calc(100% - 2rem)) !important;
+}
+
+.formulario-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem 1.5rem;
+    padding: 0.5rem 0;
+}
+
+.formulario-full {
+    grid-column: 1 / -1;
+}
+
+.toast-wrapper {
+    margin-top: 1rem;
+}
+
+@media (max-width: 600px) {
+    .formulario-grid {
+        grid-template-columns: 1fr;
+    }
+}

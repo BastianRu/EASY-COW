@@ -9,6 +9,7 @@ export const VALIDATION_RANGES = {
     TEMPERATURA_C: { min: 35, max: 43 },
     DURACION_TRATAMIENTO_DIAS: { min: 1, max: 365 },
     PRECIO_COMPRA_VENTA: { min: 1, max: 1000000000 },
+    STOCK_MEDICAMENTO: { min: 0, max: 1000000 },
 };
 
 export function isFutureDate(value) {
