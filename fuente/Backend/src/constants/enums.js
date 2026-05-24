@@ -30,6 +30,9 @@ const ROLES_USUARIO = ["admin", "usuario", "veterinario"];
 
 const FORMAS_PAGO = ["efectivo", "transferencia", "cheque", "credito"];
 
+const TIPOS_MEDICAMENTO = ["vacuna", "antibiotico", "antiparasitario", "antiinflamatorio", "vitamina", "hormonal", "otro"];
+const PRESENTACIONES_MEDICAMENTO = ["inyectable", "oral", "topico", "polvo"];
+
 module.exports = {
   RAZAS,
   SEXOS,
@@ -46,4 +49,6 @@ module.exports = {
   OBJETIVOS_DIETA,
   ROLES_USUARIO,
   FORMAS_PAGO,
+  TIPOS_MEDICAMENTO,
+  PRESENTACIONES_MEDICAMENTO,
 };

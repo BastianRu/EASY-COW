@@ -39,6 +39,10 @@ const VALIDATION_RANGES = {
     min: 1,
     max: 1000000000,
   },
+  STOCK_MEDICAMENTO: {
+    min: 0,
+    max: 1000000,
+  },
 };
 
 module.exports = VALIDATION_RANGES;

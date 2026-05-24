@@ -9,6 +9,8 @@ const produccionRoutes = require("./produccion.routes");
 const comprasRoutes = require("./compras.routes");
 const ventasRoutes = require("./ventas.routes");
 const reportesRoutes = require("./reportes.routes");
+const medicamentosRoutes = require("./medicamentos.routes");
+const historialSanitarioRoutes = require("./historialSanitario.routes");
 const { authenticate } = require("../middleware/auth.middleware");
 
 const router = Router();
@@ -24,5 +26,7 @@ router.use("/produccion", produccionRoutes);
 router.use("/compras", comprasRoutes);
 router.use("/ventas", ventasRoutes);
 router.use("/reportes", reportesRoutes);
+router.use("/medicamentos", medicamentosRoutes);
+router.use("/historial-sanitario", historialSanitarioRoutes);
 
 module.exports = router;
