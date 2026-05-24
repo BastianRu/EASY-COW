@@ -77,6 +77,22 @@ function HistorialSanitario() {
         label: `${a.identificacion}${a.nombre ? ' – ' + a.nombre : ''}`,
     }))
 
+    const obtenerHistorialFallback = async (idAnimal) => {
+        const [animalRes, enfermedadesRes, tratamientosRes, actualizacionesRes] = await Promise.all([
+            get(`/animales/${idAnimal}`),
+            get('/enfermedades', { animalId: idAnimal, limit: 100 }),
+            get('/tratamientos', { animalId: idAnimal, limit: 100 }),
+            get(`/animales/${idAnimal}/actualizaciones`),
+        ])
+
+        return {
+            animal: animalRes?.data || null,
+            enfermedades: enfermedadesRes?.data || [],
+            tratamientos: tratamientosRes?.data || [],
+            actualizaciones: actualizacionesRes?.data || [],
+        }
+    }
+
     const handleConsultar = async () => {
         if (!animalId) {
             setErrorAnimal(true)
@@ -90,6 +106,23 @@ function HistorialSanitario() {
             const res = await get('/historial-sanitario', { animalId })
             setHistorial(res.data)
         } catch (error) {
+            // Fallback para entornos donde la ruta nueva no está publicada detrás del gateway.
+            if (error.message === 'Recurso no encontrado') {
+                try {
+                    const data = await obtenerHistorialFallback(animalId)
+                    setHistorial(data)
+                    setToast({
+                        tipo: 'success',
+                        titulo: 'Historial consultado',
+                        mensaje: 'Se cargó el historial usando rutas de compatibilidad.',
+                    })
+                    return
+                } catch (fallbackError) {
+                    setToast({ tipo: 'error', titulo: 'Error al consultar', mensaje: fallbackError.message })
+                    return
+                }
+            }
+
             setToast({ tipo: 'error', titulo: 'Error al consultar', mensaje: error.message })
         } finally {
             setCargando(false)
@@ -108,8 +141,8 @@ function HistorialSanitario() {
 
     const columnasTratamientos = [
         { header: 'Fecha inicio', render: (r) => formatFecha(r.fechaInicio) },
-        { header: 'Medicamento', render: (r) => r.medicamento },
-        { header: 'Dosis', render: (r) => r.dosis },
+        { header: 'Medicamento', render: (r) => r.medicamento || '—' },
+        { header: 'Dosis', render: (r) => r.dosis || '—' },
         { header: 'Frecuencia', render: (r) => formatEnum(r.frecuencia) },
         { header: 'Duración (días)', render: (r) => r.duracion ?? '—' },
         { header: 'Estado', render: (r) => formatEnum(r.estadoTratamiento) },

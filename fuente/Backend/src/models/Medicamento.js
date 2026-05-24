@@ -52,7 +52,6 @@ const medicamentoSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-medicamentoSchema.index({ nombre: 1 });
 medicamentoSchema.index({ tipoMedicamento: 1 });
 
 module.exports = mongoose.model("Medicamento", medicamentoSchema);
