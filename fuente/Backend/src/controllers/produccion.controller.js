@@ -108,6 +108,16 @@ const createRegistroProduccion = asyncHandler(async (req, res) => {
     );
   }
 
+  // Regla: solo se puede registrar producción para vacas que sean madres de al menos una cría
+  const tieneCria = await Animal.exists({ madreId: animal._id });
+  if (!tieneCria) {
+    throw new AppError(
+      "Solo se puede registrar producción de leche para vacas que son madres de al menos una cría registrada",
+      400,
+      "BUSINESS_RULE_ERROR"
+    );
+  }
+
   const { start, end } = normalizeDayRange(fechaRegistro);
   const existing = await ProduccionLeche.findOne({
     animalId,

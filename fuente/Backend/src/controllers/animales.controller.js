@@ -13,6 +13,9 @@ const {
 } = require("../constants/validationRanges");
 
 const createAnimal = asyncHandler(async (req, res) => {
+  const esCria = req.body.esCria === true || req.body.esCria === "true";
+  const madreIdRaw = req.body.madreId?.trim?.() || req.body.madreId || null;
+
   const payload = {
     identificacion: req.body.identificacion?.trim(),
     nombre: req.body.nombre?.trim(),
@@ -23,6 +26,8 @@ const createAnimal = asyncHandler(async (req, res) => {
     color: req.body.color?.trim(),
     procedencia: req.body.procedencia?.trim(),
     observaciones: req.body.observaciones?.trim(),
+    esCria,
+    madreId: null,
   };
 
   if (!payload.identificacion || !payload.raza || !payload.sexo || !payload.fechaNacimiento) {
@@ -40,6 +45,49 @@ const createAnimal = asyncHandler(async (req, res) => {
 
   if (isFutureDate(payload.fechaNacimiento)) {
     throw new AppError("La fecha de nacimiento no puede ser futura", 400, "VALIDATION_ERROR");
+  }
+
+  if (esCria) {
+    if (!madreIdRaw) {
+      throw new AppError("Debe indicar la madre de la cría", 400, "VALIDATION_ERROR");
+    }
+    const madre = await Animal.findById(madreIdRaw).catch(() => null);
+    if (!madre) {
+      throw new AppError("La madre indicada no existe en el sistema", 400, "VALIDATION_ERROR");
+    }
+    if (madre.sexo !== "hembra") {
+      throw new AppError("El animal seleccionado como madre debe ser hembra", 400, "VALIDATION_ERROR");
+    }
+
+    // Regla: la madre debe tener al menos 15 meses más que la cría
+    const fechaMadre = new Date(madre.fechaNacimiento);
+    const fechaCria = new Date(payload.fechaNacimiento);
+    const minFechaCria = new Date(fechaMadre);
+    minFechaCria.setMonth(minFechaCria.getMonth() + 15);
+    if (fechaCria < minFechaCria) {
+      throw new AppError(
+        "La madre debe tener al menos 15 meses más que la cría",
+        400,
+        "BUSINESS_RULE_ERROR"
+      );
+    }
+
+    // Regla: máximo 2 crías por vaca en un plazo de 10 meses
+    const ventanaInicio = new Date(fechaCria);
+    ventanaInicio.setMonth(ventanaInicio.getMonth() - 10);
+    const criasEnVentana = await Animal.countDocuments({
+      madreId: madre._id,
+      fechaNacimiento: { $gte: ventanaInicio, $lte: fechaCria },
+    });
+    if (criasEnVentana >= 2) {
+      throw new AppError(
+        "La madre ya tiene 2 crías registradas en un plazo de 10 meses",
+        400,
+        "BUSINESS_RULE_ERROR"
+      );
+    }
+
+    payload.madreId = madre._id;
   }
 
   const exists = await Animal.findOne({ identificacion: payload.identificacion });

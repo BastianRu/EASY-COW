@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Atras from "../modules/atras"
 import Contenedor from "../modules/contenedor"
 import Navegar from "../modules/navegar"
@@ -9,21 +9,36 @@ import BotonPestana from "../modules/botonPestana"
 import Entrada from "../modules/Entrada"
 import Selector from "../modules/seleccion"
 import Aviso from '../modules/aviso.jsx'
-import { post } from './api.js'
+import { get, post } from './api.js'
 import { VALIDATION_RANGES, isFutureDate, isNumberInRange, isValidFreeText, hasWhitespaceIssues } from './formValidation.js'
 
 function RegistrarAnimal(){
     const [toast, setToast] = useState(null);
     const [cargando, setCargando] = useState(false);
+    const [madres, setMadres] = useState([]);
     const [campos, setCampos] = useState({
         identificacion: '', nombre: '', raza: '',
         sexo: '', fechaNacimiento: '', peso: '',
-        color: '', procedencia: '', observaciones: ''
+        color: '', procedencia: '', observaciones: '',
+        esCria: '', madreId: ''
     });
     const [errores, setErrores] = useState({
         identificacion: false, nombre: false, raza: false,
-        sexo: false, fechaNacimiento: false, peso: false
+        sexo: false, fechaNacimiento: false, peso: false,
+        madreId: false
     });
+
+    useEffect(() => {
+        const cargarMadres = async () => {
+            try {
+                const res = await get('/animales', { sexo: 'hembra', estado: 'activo', limit: 200 })
+                setMadres(res.data)
+            } catch {
+                // no bloquea el formulario si falla
+            }
+        }
+        cargarMadres()
+    }, []);
 
     const handleChange = (campo) => (e) => {
         const valor = e.target.value;
@@ -44,6 +59,7 @@ function RegistrarAnimal(){
         const colorValido    = isValidFreeText(campos.color);
         const procedenciaValida = isValidFreeText(campos.procedencia);
 
+        const esCriaSeleccionada = campos.esCria === 'si';
         const nuevosErrores = {
             identificacion: !identificacionValida,
             nombre:         !nombreValido,
@@ -51,6 +67,7 @@ function RegistrarAnimal(){
             sexo:           !campos.sexo,
             fechaNacimiento:!campos.fechaNacimiento || fechaInvalida,
             peso:           !campos.peso || !pesoValido,
+            madreId:        esCriaSeleccionada && !campos.madreId,
         };
         setErrores(nuevosErrores);
 
@@ -74,6 +91,8 @@ function RegistrarAnimal(){
                 mensaje = hasWhitespaceIssues(campos.procedencia)
                     ? 'La procedencia no puede tener espacios al inicio, al final ni consecutivos.'
                     : 'La procedencia debe tener al menos 2 caracteres.';
+            } else if (esCriaSeleccionada && !campos.madreId) {
+                mensaje = 'Debe seleccionar la madre de la cría.';
             }
 
             setToast({ tipo: 'error', titulo: 'Error al registrar el animal', mensaje });
@@ -82,10 +101,13 @@ function RegistrarAnimal(){
 
         setCargando(true);
         try {
-            await post('/animales', {
+            const body = {
                 ...campos,
                 peso: Number(campos.peso),
-            });
+                esCria: campos.esCria === 'si',
+                madreId: campos.esCria === 'si' ? campos.madreId : undefined,
+            };
+            await post('/animales', body);
             setToast({ tipo: 'success', titulo: 'Animal registrado exitosamente',
                        mensaje: `El animal ${campos.nombre || campos.identificacion} ha sido registrado en el sistema.` });
         } catch (error) {
@@ -142,6 +164,25 @@ function RegistrarAnimal(){
                         value={campos.color} onChange={handleChange('color')} />
                     <Entrada label="Procedencia" texto="Ej: Finca El Roble"
                         value={campos.procedencia} onChange={handleChange('procedencia')} />
+
+                    <Selector label="¿Es cría?" opciones={[
+                        { value: 'si', label: 'Sí' },
+                        { value: 'no', label: 'No' }
+                    ]}
+                        value={campos.esCria} onChange={handleChange('esCria')} />
+
+                    {campos.esCria === 'si' && (
+                        <Selector
+                            label="Madre *"
+                            opciones={madres.map(m => ({
+                                value: m._id,
+                                label: m.nombre ? `${m.identificacion} — ${m.nombre}` : m.identificacion
+                            }))}
+                            value={campos.madreId}
+                            onChange={handleChange('madreId')}
+                            error={errores.madreId}
+                        />
+                    )}
 
                     <div className="formulario-full">
                         <Entrada label="Observaciones" texto="Información adicional sobre el animal"

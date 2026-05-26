@@ -50,6 +50,15 @@ const animalSchema = new mongoose.Schema(
       trim: true,
       default: null,
     },
+    esCria: {
+      type: Boolean,
+      default: false,
+    },
+    madreId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Animal",
+      default: null,
+    },
     estado: {
       type: String,
       enum: ESTADOS_ANIMAL,
