@@ -53,6 +53,7 @@ function RegistrarEnfermo(){
             allowEmpty: true,
         });
         const sintomasValido = isValidFreeText(campos.sintomas, { required: true });
+        const observacionesValidas = isValidFreeText(campos.observaciones);
 
         const nuevosErrores = {
             animalId:       !campos.animalId,
@@ -63,7 +64,7 @@ function RegistrarEnfermo(){
         };
         setErrores(nuevosErrores);
 
-        if (Object.values(nuevosErrores).some(Boolean)) {
+        if (Object.values(nuevosErrores).some(Boolean) || !observacionesValidas) {
             let mensaje = 'No se han ingresado los datos obligatorios.';
             if (fechaInvalida) {
                 mensaje = 'La fecha de detección no puede ser futura.';
@@ -73,6 +74,10 @@ function RegistrarEnfermo(){
                     : 'Los síntomas deben tener al menos 2 caracteres.';
             } else if (!temperaturaValida) {
                 mensaje = `La temperatura debe estar entre ${VALIDATION_RANGES.TEMPERATURA_C.min} y ${VALIDATION_RANGES.TEMPERATURA_C.max} °C.`;
+            } else if (!observacionesValidas) {
+                mensaje = hasWhitespaceIssues(campos.observaciones)
+                    ? 'Las observaciones no pueden tener espacios al inicio, al final ni consecutivos.'
+                    : 'Las observaciones deben tener al menos 2 caracteres.';
             }
 
             setToast({ tipo: 'error', titulo: 'Error al registrar', mensaje });

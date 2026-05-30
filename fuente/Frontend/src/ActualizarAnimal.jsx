@@ -10,7 +10,7 @@ import Selector from "../modules/seleccion"
 import Aviso from '../modules/aviso.jsx'
 import './ActualizarAnimal.css'
 import { post, get } from './api.js'
-import { VALIDATION_RANGES, isNumberInRange } from './formValidation.js'
+import { VALIDATION_RANGES, isNumberInRange, isValidFreeText, hasWhitespaceIssues } from './formValidation.js'
 
 function ActualizarAnimal(){
     const [toast, setToast] = useState(null);
@@ -81,6 +81,8 @@ function ActualizarAnimal(){
             allowEmpty: true,
         });
 
+        const observacionesValidas = isValidFreeText(campos.observaciones);
+
         const nuevosErrores = {
             animalId: !campos.animalId,
             peso: !campos.peso || !pesoValido,
@@ -90,7 +92,7 @@ function ActualizarAnimal(){
         };
         setErrores(nuevosErrores);
 
-        if (Object.values(nuevosErrores).some(Boolean)) {
+        if (Object.values(nuevosErrores).some(Boolean) || !observacionesValidas) {
             let mensaje = 'No se han ingresado los datos obligatorios.';
             if (!pesoValido) {
                 mensaje = `El peso debe estar entre ${VALIDATION_RANGES.PESO_KG.min} y ${VALIDATION_RANGES.PESO_KG.max} kg.`;
@@ -100,6 +102,10 @@ function ActualizarAnimal(){
                 mensaje = `La condición corporal debe estar entre ${VALIDATION_RANGES.CONDICION_CORPORAL.min} y ${VALIDATION_RANGES.CONDICION_CORPORAL.max}.`;
             } else if (!produccionValida) {
                 mensaje = `La producción de leche debe estar entre ${VALIDATION_RANGES.PRODUCCION_LECHE_L_DIA.min} y ${VALIDATION_RANGES.PRODUCCION_LECHE_L_DIA.max} L/día.`;
+            } else if (!observacionesValidas) {
+                mensaje = hasWhitespaceIssues(campos.observaciones)
+                    ? 'Las observaciones no pueden tener espacios al inicio, al final ni consecutivos.'
+                    : 'Las observaciones deben tener al menos 2 caracteres.';
             }
 
             setToast({ tipo: 'error', titulo: 'Error al guardar', mensaje });

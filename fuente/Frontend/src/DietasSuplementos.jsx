@@ -53,6 +53,8 @@ function DietasSuplementos(){
         });
         const fechaInvalida      = isFutureDate(campos.fechaRegistro);
         const alimentoBaseValido = isValidFreeText(campos.alimentoBase, { required: true });
+        const suplementosValidos = isValidFreeText(campos.suplementos);
+        const observacionesValidas = isValidFreeText(campos.observaciones);
 
         const nuevosErrores = {
             animalId:       !campos.animalId,
@@ -65,7 +67,7 @@ function DietasSuplementos(){
         };
         setErrores(nuevosErrores);
 
-        if (Object.values(nuevosErrores).some(Boolean)) {
+        if (Object.values(nuevosErrores).some(Boolean) || !suplementosValidos || !observacionesValidas) {
             let mensaje = 'No se han ingresado los datos obligatorios.';
             if (fechaInvalida) {
                 mensaje = 'La fecha de registro no puede ser futura.';
@@ -75,6 +77,14 @@ function DietasSuplementos(){
                     : 'El alimento base debe tener al menos 2 caracteres.';
             } else if (!cantidadValida) {
                 mensaje = `La cantidad debe estar entre ${VALIDATION_RANGES.CANTIDAD_ALIMENTO_KG_DIA.min} y ${VALIDATION_RANGES.CANTIDAD_ALIMENTO_KG_DIA.max} kg/día.`;
+            } else if (!suplementosValidos) {
+                mensaje = hasWhitespaceIssues(campos.suplementos)
+                    ? 'Los suplementos no pueden tener espacios al inicio, al final ni consecutivos.'
+                    : 'Los suplementos deben tener al menos 2 caracteres.';
+            } else if (!observacionesValidas) {
+                mensaje = hasWhitespaceIssues(campos.observaciones)
+                    ? 'Las observaciones no pueden tener espacios al inicio, al final ni consecutivos.'
+                    : 'Las observaciones deben tener al menos 2 caracteres.';
             }
 
             setToast({ tipo: 'error', titulo: 'Error al registrar', mensaje });

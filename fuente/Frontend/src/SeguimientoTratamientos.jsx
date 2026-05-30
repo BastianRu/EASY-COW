@@ -57,6 +57,7 @@ function SeguimientoTratamientos(){
         const medicamentoValido = isValidFreeText(campos.medicamento, { required: true });
         const dosisValida       = isValidFreeText(campos.dosis,        { required: true });
         const veterinarioValido = isValidFreeText(campos.veterinario);
+        const observacionesValidas = isValidFreeText(campos.observaciones);
 
         const nuevosErrores = {
             animalId:         !campos.animalId,
@@ -70,7 +71,7 @@ function SeguimientoTratamientos(){
         };
         setErrores(nuevosErrores);
 
-        if (Object.values(nuevosErrores).some(Boolean) || !veterinarioValido) {
+        if (Object.values(nuevosErrores).some(Boolean) || !veterinarioValido || !observacionesValidas) {
             let mensaje = 'No se han ingresado los datos obligatorios.';
             if (fechaInvalida) {
                 mensaje = 'La fecha de inicio no puede ser futura.';
@@ -88,6 +89,10 @@ function SeguimientoTratamientos(){
                     : 'El nombre del veterinario debe tener al menos 2 caracteres.';
             } else if (!duracionValida) {
                 mensaje = `La duración debe ser un entero entre ${VALIDATION_RANGES.DURACION_TRATAMIENTO_DIAS.min} y ${VALIDATION_RANGES.DURACION_TRATAMIENTO_DIAS.max} días.`;
+            } else if (!observacionesValidas) {
+                mensaje = hasWhitespaceIssues(campos.observaciones)
+                    ? 'Las observaciones no pueden tener espacios al inicio, al final ni consecutivos.'
+                    : 'Las observaciones deben tener al menos 2 caracteres.';
             }
 
             setToast({ tipo: 'error', titulo: 'Error al guardar', mensaje });

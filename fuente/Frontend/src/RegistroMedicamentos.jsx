@@ -10,7 +10,7 @@ import Aviso from '../modules/aviso.jsx'
 import imagenPill from '../images/pill.svg'
 import './RegistroMedicamentos.css'
 import { post } from './api.js'
-import { VALIDATION_RANGES, isNumberInRange } from './formValidation.js'
+import { VALIDATION_RANGES, isNumberInRange, isValidFreeText, hasWhitespaceIssues } from './formValidation.js'
 
 const OPCIONES_TIPO = [
     { value: 'vacuna',           label: 'Vacuna' },
@@ -63,19 +63,39 @@ function RegistroMedicamentos() {
             min: VALIDATION_RANGES.STOCK_MEDICAMENTO.min,
             max: VALIDATION_RANGES.STOCK_MEDICAMENTO.max,
         })
+        const nombreValido = isValidFreeText(campos.nombre, { required: true })
+        const descripcionValida = isValidFreeText(campos.descripcion)
+        const dosisValida = isValidFreeText(campos.dosis)
+        const observacionesValidas = isValidFreeText(campos.observaciones)
 
         const nuevosErrores = {
-            nombre:          !campos.nombre?.trim(),
+            nombre:          !nombreValido,
             tipoMedicamento: !campos.tipoMedicamento,
             presentacion:    !campos.presentacion,
             stockActual:     campos.stockActual === '' || !stockValido,
         }
         setErrores(nuevosErrores)
 
-        if (Object.values(nuevosErrores).some(Boolean)) {
+        if (Object.values(nuevosErrores).some(Boolean) || !descripcionValida || !dosisValida || !observacionesValidas) {
             let mensaje = 'No se han ingresado los datos obligatorios.'
-            if (!stockValido && campos.stockActual !== '') {
+            if (!nombreValido) {
+                mensaje = hasWhitespaceIssues(campos.nombre)
+                    ? 'El nombre no puede tener espacios al inicio, al final ni consecutivos.'
+                    : 'El nombre del medicamento debe tener al menos 2 caracteres.'
+            } else if (!stockValido && campos.stockActual !== '') {
                 mensaje = `El stock debe estar entre ${VALIDATION_RANGES.STOCK_MEDICAMENTO.min} y ${VALIDATION_RANGES.STOCK_MEDICAMENTO.max}.`
+            } else if (!descripcionValida) {
+                mensaje = hasWhitespaceIssues(campos.descripcion)
+                    ? 'La descripción no puede tener espacios al inicio, al final ni consecutivos.'
+                    : 'La descripción debe tener al menos 2 caracteres.'
+            } else if (!dosisValida) {
+                mensaje = hasWhitespaceIssues(campos.dosis)
+                    ? 'La dosis no puede tener espacios al inicio, al final ni consecutivos.'
+                    : 'La dosis debe tener al menos 2 caracteres.'
+            } else if (!observacionesValidas) {
+                mensaje = hasWhitespaceIssues(campos.observaciones)
+                    ? 'Las observaciones no pueden tener espacios al inicio, al final ni consecutivos.'
+                    : 'Las observaciones deben tener al menos 2 caracteres.'
             }
             setToast({ tipo: 'error', titulo: 'Error al registrar', mensaje })
             return

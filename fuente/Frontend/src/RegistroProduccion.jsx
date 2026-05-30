@@ -10,7 +10,7 @@ import Aviso from '../modules/aviso.jsx'
 import iconoProductivo from '../images/productivo.svg'
 import './RegistroProduccion.css'
 import { get, post } from './api.js'
-import { VALIDATION_RANGES, isFutureDate, isNumberInRange } from './formValidation.js'
+import { VALIDATION_RANGES, isFutureDate, isNumberInRange, isValidFreeText, hasWhitespaceIssues } from './formValidation.js'
 
 function RegistroProduccion() {
     const [toast, setToast] = useState(null)
@@ -59,6 +59,7 @@ function RegistroProduccion() {
             min: VALIDATION_RANGES.PRODUCCION_LECHE_L_DIA.min,
             max: VALIDATION_RANGES.PRODUCCION_LECHE_L_DIA.max,
         })
+        const observacionesValidas = isValidFreeText(campos.observaciones)
 
         const nuevosErrores = {
             animalId: !campos.animalId,
@@ -67,12 +68,16 @@ function RegistroProduccion() {
         }
         setErrores(nuevosErrores)
 
-        if (Object.values(nuevosErrores).some(Boolean)) {
+        if (Object.values(nuevosErrores).some(Boolean) || !observacionesValidas) {
             let mensaje = 'No se han ingresado los datos obligatorios.'
             if (fechaInvalida) {
                 mensaje = 'La fecha de registro no puede ser futura.'
             } else if (!litrosValidos) {
                 mensaje = `La producción diaria debe estar entre ${VALIDATION_RANGES.PRODUCCION_LECHE_L_DIA.min} y ${VALIDATION_RANGES.PRODUCCION_LECHE_L_DIA.max} litros.`
+            } else if (!observacionesValidas) {
+                mensaje = hasWhitespaceIssues(campos.observaciones)
+                    ? 'Las observaciones no pueden tener espacios al inicio, al final ni consecutivos.'
+                    : 'Las observaciones deben tener al menos 2 caracteres.'
             } else if (animales.length === 0) {
                 mensaje = 'No hay vacas activas disponibles para registrar producción.'
             }
