@@ -10,7 +10,7 @@ import Aviso from '../modules/aviso.jsx'
 import imagenPill from '../images/pill.svg'
 import './RegistroMedicamentos.css'
 import { post } from './api.js'
-import { VALIDATION_RANGES, isNumberInRange, isValidFreeText, hasWhitespaceIssues } from './formValidation.js'
+import { VALIDATION_RANGES, isNumberInRange, isValidFreeText, hasWhitespaceIssues, isPastDate } from './formValidation.js'
 
 const OPCIONES_TIPO = [
     { value: 'vacuna',           label: 'Vacuna' },
@@ -48,6 +48,7 @@ function RegistroMedicamentos() {
         tipoMedicamento: false,
         presentacion: false,
         stockActual: false,
+        fechaVencimiento: false,
     })
 
     const handleChange = (campo) => (e) => {
@@ -67,12 +68,14 @@ function RegistroMedicamentos() {
         const descripcionValida = isValidFreeText(campos.descripcion)
         const dosisValida = isValidFreeText(campos.dosis)
         const observacionesValidas = isValidFreeText(campos.observaciones)
+        const fechaVencimientoVencida = isPastDate(campos.fechaVencimiento)
 
         const nuevosErrores = {
-            nombre:          !nombreValido,
-            tipoMedicamento: !campos.tipoMedicamento,
-            presentacion:    !campos.presentacion,
-            stockActual:     campos.stockActual === '' || !stockValido,
+            nombre:           !nombreValido,
+            tipoMedicamento:  !campos.tipoMedicamento,
+            presentacion:     !campos.presentacion,
+            stockActual:      campos.stockActual === '' || !stockValido,
+            fechaVencimiento: !campos.fechaVencimiento || fechaVencimientoVencida,
         }
         setErrores(nuevosErrores)
 
@@ -82,6 +85,10 @@ function RegistroMedicamentos() {
                 mensaje = hasWhitespaceIssues(campos.nombre)
                     ? 'El nombre no puede tener espacios al inicio, al final ni consecutivos.'
                     : 'El nombre del medicamento debe tener al menos 2 caracteres.'
+            } else if (!campos.fechaVencimiento) {
+                mensaje = 'La fecha de vencimiento es obligatoria.'
+            } else if (fechaVencimientoVencida) {
+                mensaje = 'La fecha de vencimiento no puede ser anterior a hoy.'
             } else if (!stockValido && campos.stockActual !== '') {
                 mensaje = `El stock debe estar entre ${VALIDATION_RANGES.STOCK_MEDICAMENTO.min} y ${VALIDATION_RANGES.STOCK_MEDICAMENTO.max}.`
             } else if (!descripcionValida) {
@@ -186,10 +193,11 @@ function RegistroMedicamentos() {
                     />
 
                     <Entrada
-                        label="Fecha de vencimiento"
+                        label="Fecha de vencimiento *"
                         type="date"
                         value={campos.fechaVencimiento}
                         onChange={handleChange('fechaVencimiento')}
+                        error={errores.fechaVencimiento}
                     />
                     <div className="formulario-full">
                         <Entrada

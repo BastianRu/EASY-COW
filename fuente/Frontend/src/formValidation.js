@@ -19,6 +19,15 @@ export function isFutureDate(value) {
     return inputDate.getTime() > Date.now();
 }
 
+// Retorna true si la fecha es anterior a hoy (medianoche local)
+export function isPastDate(value) {
+    if (!value) return false;
+    const inputDate = new Date(value + 'T00:00:00');
+    if (Number.isNaN(inputDate.getTime())) return false;
+    const hoy = new Date(); hoy.setHours(0, 0, 0, 0);
+    return inputDate < hoy;
+}
+
 export function isNumberInRange(value, { min, max, integer = false, allowEmpty = false }) {
     if (value === undefined || value === null || value === '') {
         return allowEmpty;
