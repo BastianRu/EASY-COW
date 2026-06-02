@@ -1,0 +1,73 @@
+.stock-medicamentos .contenedor {
+    margin: auto;
+    width: min(960px, calc(100% - 2rem)) !important;
+}
+
+.formulario-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem 1.5rem;
+    padding: 0.5rem 0;
+}
+
+.formulario-full {
+    grid-column: 1 / -1;
+}
+
+.info-medicamento {
+    background-color: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 0.5rem 1.5rem;
+}
+
+.info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.info-label {
+    font-size: 0.75rem;
+    color: #6b7280;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.info-valor {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #111827;
+}
+
+.info-valor.stock-bajo {
+    color: #dc2626;
+}
+
+.alerta-inventario {
+    margin: 0.75rem 0 0.25rem;
+    background-color: #fef9c3;
+    border: 1px solid #fbbf24;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    color: #92400e;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.toast-wrapper {
+    margin-top: 1rem;
+}
+
+@media (max-width: 600px) {
+    .formulario-grid {
+        grid-template-columns: 1fr;
+    }
+}

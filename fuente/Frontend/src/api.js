@@ -96,3 +96,19 @@ export async function get(endpoint, params = {}) {
         throw error;
     }
 }
+
+export async function patch(endpoint, datos) {
+    try {
+        const respuesta = await fetch(getApiUrl(endpoint), {
+            method: 'PATCH',
+            headers: getAuthHeaders(),
+            body: JSON.stringify(datos),
+        });
+        return handleResponse(respuesta);
+    } catch (error) {
+        if (error instanceof TypeError) {
+            throw new Error('No se pudo conectar con el servidor. Verifica la URL del API o el proxy de Vite.');
+        }
+        throw error;
+    }
+}

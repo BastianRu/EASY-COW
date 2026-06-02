@@ -16,6 +16,7 @@ import VentaGanado from './VentaGanado.jsx'
 import Reportes from './Reportes.jsx'
 import RegistroMedicamentos from './RegistroMedicamentos.jsx'
 import HistorialSanitario from './HistorialSanitario.jsx'
+import StockMedicamentos from './StockMedicamentos.jsx'
 /* Styles */
 import './styles/text.css'
 import './styles/subtext.css'
@@ -41,6 +42,7 @@ createRoot(document.getElementById('root')).render(
         <Route path='/Reportes' element={<Reportes/>}/>
         <Route path='/RegistroMedicamentos' element={<RegistroMedicamentos/>}/>
         <Route path='/HistorialSanitario' element={<HistorialSanitario/>}/>
+        <Route path='/StockMedicamentos' element={<StockMedicamentos/>}/>
       </Routes>
     </BrowserRouter>
   </StrictMode>

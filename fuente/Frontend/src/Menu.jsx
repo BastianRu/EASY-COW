@@ -163,6 +163,12 @@ function Menu (){
                         </div>
                         Historial Sanitario
                     </Boton>
+                    <Boton onClick={()=>Navigate('/StockMedicamentos')}>
+                        <div className="imagenPeque">
+                            <img src={imagenP4} alt="stock"/>
+                        </div>
+                        Actualizar Stock de Medicamentos
+                    </Boton>
                 </Contenedor>
             </div>
             <div className="menu-container" id="estadisticas">

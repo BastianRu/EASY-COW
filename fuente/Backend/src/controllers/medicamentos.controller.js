@@ -66,4 +66,40 @@ const listMedicamentos = asyncHandler(async (req, res) => {
   });
 });
 
-module.exports = { createMedicamento, listMedicamentos };
+const updateStock = asyncHandler(async (req, res) => {
+  const medicamento = await Medicamento.findById(req.params.id);
+  if (!medicamento) {
+    throw new AppError("Medicamento no encontrado", 404, "NOT_FOUND");
+  }
+
+  const nuevoStock = Number(req.body.stockActual);
+  if (
+    !Number.isFinite(nuevoStock) ||
+    nuevoStock < VALIDATION_RANGES.STOCK_MEDICAMENTO.min ||
+    nuevoStock > VALIDATION_RANGES.STOCK_MEDICAMENTO.max
+  ) {
+    throw new AppError(
+      `El stock debe estar entre ${VALIDATION_RANGES.STOCK_MEDICAMENTO.min} y ${VALIDATION_RANGES.STOCK_MEDICAMENTO.max}`,
+      400,
+      "VALIDATION_ERROR"
+    );
+  }
+
+  medicamento.stockActual = nuevoStock;
+  await medicamento.save();
+
+  const bajoInventario =
+    medicamento.stockMinimo !== null &&
+    medicamento.stockMinimo !== undefined &&
+    nuevoStock <= medicamento.stockMinimo;
+
+  return sendSuccess(res, 200, {
+    message: bajoInventario
+      ? `Stock actualizado. ALERTA: el stock actual (${nuevoStock}) es menor o igual al stock mínimo (${medicamento.stockMinimo})`
+      : "Stock actualizado exitosamente",
+    data: medicamento,
+    meta: { bajoInventario },
+  });
+});
+
+module.exports = { createMedicamento, listMedicamentos, updateStock };
