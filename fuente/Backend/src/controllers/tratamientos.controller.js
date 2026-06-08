@@ -52,7 +52,9 @@ const createTratamiento = asyncHandler(async (req, res) => {
       400,
       "BUSINESS_RULE_ERROR"
     );
-  } mismo animal + mismo medicamento (sin distinción de mayúsculas) + misma fecha
+  } 
+
+  // Verificar duplicado: mismo animal + mismo medicamento (sin distinción de mayúsculas) + misma fecha
   const { start, end } = normalizeDayRange(fechaInicio);
   const duplicado = await Tratamiento.findOne({
     animalId: animal._id,
