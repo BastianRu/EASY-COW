@@ -35,6 +35,15 @@ const createCompra = asyncHandler(async (req, res) => {
     throw new AppError("Animal no encontrado", 404, "NOT_FOUND");
   }
 
+  const compraExistente = await Compra.findOne({ animalId: animal._id });
+  if (compraExistente) {
+    throw new AppError(
+      "Ya existe una compra registrada para este animal",
+      400,
+      "BUSINESS_RULE_ERROR"
+    );
+  }
+
   const compra = await Compra.create({
     animalId,
     fechaCompra,
