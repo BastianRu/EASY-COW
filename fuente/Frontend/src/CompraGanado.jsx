@@ -161,7 +161,8 @@ function CompraGanado() {
                     <Entrada
                         label="Precio de compra (COP) *"
                         texto="Ej: 2500000"
-                        type="number"
+                        type="text"
+                        inputMode="decimal"
                         value={campos.precioCompra}
                         onChange={handleChange('precioCompra')}
                         error={errores.precioCompra}

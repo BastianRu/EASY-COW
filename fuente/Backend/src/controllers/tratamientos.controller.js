@@ -4,7 +4,7 @@ const Tratamiento = require("../models/Tratamiento");
 const asyncHandler = require("../utils/asyncHandler");
 const AppError = require("../utils/AppError");
 const { sendSuccess, parsePagination, buildPaginationMeta } = require("../utils/http");
-const { isFutureDate } = require("../utils/date");
+const { isFutureDate, normalizeDayRange } = require("../utils/date");
 const { ensureNumberInRange } = require("../utils/numberValidation");
 const { DURACION_TRATAMIENTO_DIAS } = require("../constants/validationRanges");
 
@@ -46,7 +46,20 @@ const createTratamiento = asyncHandler(async (req, res) => {
     throw new AppError("Animal no encontrado", 404, "NOT_FOUND");
   }
 
-  let registro = null;
+  // Verificar duplicado: mismo animal + mismo medicamento (sin distinción de mayúsculas) + misma fecha
+  const { start, end } = normalizeDayRange(fechaInicio);
+  const duplicado = await Tratamiento.findOne({
+    animalId: animal._id,
+    medicamento: { $regex: new RegExp(`^${medicamento.trim().replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`, "i") },
+    fechaInicio: { $gte: start, $lte: end },
+  });
+  if (duplicado) {
+    throw new AppError(
+      "Ya existe un tratamiento con el mismo medicamento registrado para este animal en la misma fecha",
+      400,
+      "BUSINESS_RULE_ERROR"
+    );
+  }
   if (registroEnfermedadId) {
     registro = await RegistroEnfermedad.findById(registroEnfermedadId);
     if (!registro || String(registro.animalId) !== String(animal._id)) {

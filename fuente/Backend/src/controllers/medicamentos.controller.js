@@ -14,14 +14,44 @@ const createMedicamento = asyncHandler(async (req, res) => {
   const stock = Number(stockActual);
   if (
     !Number.isFinite(stock) ||
+    !Number.isInteger(stock) ||
     stock < VALIDATION_RANGES.STOCK_MEDICAMENTO.min ||
     stock > VALIDATION_RANGES.STOCK_MEDICAMENTO.max
   ) {
     throw new AppError(
-      `El stock actual debe estar entre ${VALIDATION_RANGES.STOCK_MEDICAMENTO.min} y ${VALIDATION_RANGES.STOCK_MEDICAMENTO.max}`,
+      `El stock actual debe ser un número entero entre ${VALIDATION_RANGES.STOCK_MEDICAMENTO.min} y ${VALIDATION_RANGES.STOCK_MEDICAMENTO.max}`,
       400,
       "VALIDATION_ERROR"
     );
+  }
+
+  if (stockMinimo !== undefined && stockMinimo !== "" && stockMinimo !== null) {
+    const minStock = Number(stockMinimo);
+    if (
+      !Number.isFinite(minStock) ||
+      !Number.isInteger(minStock) ||
+      minStock < VALIDATION_RANGES.STOCK_MEDICAMENTO.min ||
+      minStock > VALIDATION_RANGES.STOCK_MEDICAMENTO.max
+    ) {
+      throw new AppError(
+        `El stock mínimo debe ser un número entero entre ${VALIDATION_RANGES.STOCK_MEDICAMENTO.min} y ${VALIDATION_RANGES.STOCK_MEDICAMENTO.max}`,
+        400,
+        "VALIDATION_ERROR"
+      );
+    }
+  }
+
+  if (fechaVencimiento) {
+    const fecha = new Date(fechaVencimiento);
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
+    if (isNaN(fecha.getTime()) || fecha < hoy) {
+      throw new AppError(
+        "La fecha de vencimiento no puede ser anterior a hoy",
+        400,
+        "VALIDATION_ERROR"
+      );
+    }
   }
 
   const existe = await Medicamento.findOne({ nombre: { $regex: new RegExp(`^${nombre.trim()}$`, "i") } });
@@ -53,7 +83,10 @@ const listMedicamentos = asyncHandler(async (req, res) => {
 
   const filter = {};
   if (tipoMedicamento) filter.tipoMedicamento = tipoMedicamento;
-  if (search) filter.nombre = { $regex: new RegExp(search, "i") };
+  if (search) {
+    const escapedSearch = search.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    filter.nombre = { $regex: new RegExp(escapedSearch, "i") };
+  }
 
   const [data, total] = await Promise.all([
     Medicamento.find(filter).sort({ nombre: 1 }).skip(skip).limit(limit),
@@ -75,11 +108,12 @@ const updateStock = asyncHandler(async (req, res) => {
   const nuevoStock = Number(req.body.stockActual);
   if (
     !Number.isFinite(nuevoStock) ||
+    !Number.isInteger(nuevoStock) ||
     nuevoStock < VALIDATION_RANGES.STOCK_MEDICAMENTO.min ||
     nuevoStock > VALIDATION_RANGES.STOCK_MEDICAMENTO.max
   ) {
     throw new AppError(
-      `El stock debe estar entre ${VALIDATION_RANGES.STOCK_MEDICAMENTO.min} y ${VALIDATION_RANGES.STOCK_MEDICAMENTO.max}`,
+      `El stock debe ser un número entero entre ${VALIDATION_RANGES.STOCK_MEDICAMENTO.min} y ${VALIDATION_RANGES.STOCK_MEDICAMENTO.max}`,
       400,
       "VALIDATION_ERROR"
     );

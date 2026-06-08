@@ -34,6 +34,14 @@ const createAnimal = asyncHandler(async (req, res) => {
     throw new AppError("Campos obligatorios incompletos", 400, "VALIDATION_ERROR");
   }
 
+  if (!/^\d{5}$/.test(payload.identificacion)) {
+    throw new AppError(
+      "La identificación debe tener exactamente 5 dígitos numéricos",
+      400,
+      "VALIDATION_ERROR"
+    );
+  }
+
   payload.peso = ensureNumberInRange({
     value: payload.peso,
     field: "peso",
@@ -115,7 +123,8 @@ const listAnimales = asyncHandler(async (req, res) => {
   if (sexo) filter.sexo = sexo;
 
   if (search) {
-    const pattern = new RegExp(search, "i");
+    const escapedSearch = search.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const pattern = new RegExp(escapedSearch, "i");
     filter.$or = [{ identificacion: pattern }, { nombre: pattern }];
   }
 

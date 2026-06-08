@@ -151,7 +151,7 @@ function RegistrarEnfermo(){
                         value={campos.enfermedad} onChange={handleChange('enfermedad')}
                         error={errores.enfermedad} />
 
-                    <Entrada label="Temperatura (°C)" texto="Ej: 39.5" type="number"
+                    <Entrada label="Temperatura (°C)" texto="Ej: 39.5" type="text" inputMode="decimal"
                         value={campos.temperatura} onChange={handleChange('temperatura')}
                         error={errores.temperatura}
                         min={VALIDATION_RANGES.TEMPERATURA_C.min} max={VALIDATION_RANGES.TEMPERATURA_C.max} step="0.1" />

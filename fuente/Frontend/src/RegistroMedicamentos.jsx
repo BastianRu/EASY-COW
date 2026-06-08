@@ -63,6 +63,12 @@ function RegistroMedicamentos() {
         const stockValido = isNumberInRange(campos.stockActual, {
             min: VALIDATION_RANGES.STOCK_MEDICAMENTO.min,
             max: VALIDATION_RANGES.STOCK_MEDICAMENTO.max,
+            integer: true,
+        })
+        const stockMinimoValido = campos.stockMinimo === '' || isNumberInRange(campos.stockMinimo, {
+            min: VALIDATION_RANGES.STOCK_MEDICAMENTO.min,
+            max: VALIDATION_RANGES.STOCK_MEDICAMENTO.max,
+            integer: true,
         })
         const nombreValido = isValidFreeText(campos.nombre, { required: true })
         const descripcionValida = isValidFreeText(campos.descripcion)
@@ -79,7 +85,7 @@ function RegistroMedicamentos() {
         }
         setErrores(nuevosErrores)
 
-        if (Object.values(nuevosErrores).some(Boolean) || !descripcionValida || !dosisValida || !observacionesValidas) {
+        if (Object.values(nuevosErrores).some(Boolean) || !stockMinimoValido || !descripcionValida || !dosisValida || !observacionesValidas) {
             let mensaje = 'No se han ingresado los datos obligatorios.'
             if (!nombreValido) {
                 mensaje = hasWhitespaceIssues(campos.nombre)
@@ -90,7 +96,9 @@ function RegistroMedicamentos() {
             } else if (fechaVencimientoVencida) {
                 mensaje = 'La fecha de vencimiento no puede ser anterior a hoy.'
             } else if (!stockValido && campos.stockActual !== '') {
-                mensaje = `El stock debe estar entre ${VALIDATION_RANGES.STOCK_MEDICAMENTO.min} y ${VALIDATION_RANGES.STOCK_MEDICAMENTO.max}.`
+                mensaje = `El stock debe ser un número entero entre ${VALIDATION_RANGES.STOCK_MEDICAMENTO.min} y ${VALIDATION_RANGES.STOCK_MEDICAMENTO.max}.`
+            } else if (!stockMinimoValido) {
+                mensaje = `El stock mínimo debe ser un número entero entre ${VALIDATION_RANGES.STOCK_MEDICAMENTO.min} y ${VALIDATION_RANGES.STOCK_MEDICAMENTO.max}.`
             } else if (!descripcionValida) {
                 mensaje = hasWhitespaceIssues(campos.descripcion)
                     ? 'La descripción no puede tener espacios al inicio, al final ni consecutivos.'
@@ -176,7 +184,8 @@ function RegistroMedicamentos() {
                     <Entrada
                         label="Stock actual (unidades) *"
                         texto="Ej: 50"
-                        type="number"
+                        type="text"
+                        inputMode="numeric"
                         value={campos.stockActual}
                         onChange={handleChange('stockActual')}
                         error={errores.stockActual}
@@ -186,7 +195,8 @@ function RegistroMedicamentos() {
                     <Entrada
                         label="Stock mínimo (unidades)"
                         texto="Ej: 10"
-                        type="number"
+                        type="text"
+                        inputMode="numeric"
                         value={campos.stockMinimo}
                         onChange={handleChange('stockMinimo')}
                         min={0}

@@ -60,6 +60,7 @@ function StockMedicamentos() {
         const stockValido = isNumberInRange(campos.nuevoStock, {
             min: VALIDATION_RANGES.STOCK_MEDICAMENTO.min,
             max: VALIDATION_RANGES.STOCK_MEDICAMENTO.max,
+            integer: true,
         })
 
         const nuevosErrores = {
@@ -71,7 +72,7 @@ function StockMedicamentos() {
         if (Object.values(nuevosErrores).some(Boolean)) {
             let mensaje = 'No se han ingresado los datos obligatorios.'
             if (!stockValido && campos.nuevoStock !== '') {
-                mensaje = `El stock debe ser un número entre ${VALIDATION_RANGES.STOCK_MEDICAMENTO.min} y ${VALIDATION_RANGES.STOCK_MEDICAMENTO.max}.`
+                mensaje = `El stock debe ser un número entero entre ${VALIDATION_RANGES.STOCK_MEDICAMENTO.min} y ${VALIDATION_RANGES.STOCK_MEDICAMENTO.max}.`
             }
             setToast({ tipo: 'error', titulo: 'Error al actualizar', mensaje })
             return
@@ -173,7 +174,8 @@ function StockMedicamentos() {
                     <Entrada
                         label="Nuevo stock (unidades) *"
                         texto="Ej: 50"
-                        type="number"
+                        type="text"
+                        inputMode="numeric"
                         value={campos.nuevoStock}
                         onChange={handleChange('nuevoStock')}
                         error={errores.nuevoStock}

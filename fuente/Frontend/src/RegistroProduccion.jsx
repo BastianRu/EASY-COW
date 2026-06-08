@@ -152,7 +152,8 @@ function RegistroProduccion() {
                     <Entrada
                         label="Litros de Leche *"
                         texto="Ej: 18.5"
-                        type="number"
+                        type="text"
+                        inputMode="decimal"
                         value={campos.litrosLeche}
                         onChange={handleChange('litrosLeche')}
                         error={errores.litrosLeche}

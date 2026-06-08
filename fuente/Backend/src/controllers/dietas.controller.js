@@ -24,6 +24,14 @@ const createDieta = asyncHandler(async (req, res) => {
     throw new AppError("Campos obligatorios incompletos", 400, "VALIDATION_ERROR");
   }
 
+  if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s\-]+$/.test(alimentoBase.trim())) {
+    throw new AppError(
+      "El alimento base solo puede contener letras, no números ni caracteres especiales",
+      400,
+      "VALIDATION_ERROR"
+    );
+  }
+
   const cantidadValidada = ensureNumberInRange({
     value: cantidad,
     field: "cantidad",

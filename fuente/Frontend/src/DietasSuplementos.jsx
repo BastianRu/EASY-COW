@@ -10,7 +10,7 @@ import Selector from "../modules/seleccion"
 import Aviso from '../modules/aviso.jsx'
 import './DietasSuplementos.css'
 import { post, get } from './api.js'
-import { VALIDATION_RANGES, isFutureDate, isNumberInRange, isValidFreeText, hasWhitespaceIssues } from './formValidation.js'
+import { VALIDATION_RANGES, isFutureDate, isNumberInRange, isValidFreeText, hasWhitespaceIssues, isLettersOnly } from './formValidation.js'
 
 function DietasSuplementos(){
     const [toast, setToast] = useState(null);
@@ -52,7 +52,7 @@ function DietasSuplementos(){
             max: VALIDATION_RANGES.CANTIDAD_ALIMENTO_KG_DIA.max,
         });
         const fechaInvalida      = isFutureDate(campos.fechaRegistro);
-        const alimentoBaseValido = isValidFreeText(campos.alimentoBase, { required: true });
+        const alimentoBaseValido = isLettersOnly(campos.alimentoBase, { required: true });
         const suplementosValidos = isValidFreeText(campos.suplementos);
         const observacionesValidas = isValidFreeText(campos.observaciones);
 
@@ -74,7 +74,9 @@ function DietasSuplementos(){
             } else if (!alimentoBaseValido) {
                 mensaje = hasWhitespaceIssues(campos.alimentoBase)
                     ? 'El alimento base no puede tener espacios al inicio, al final ni consecutivos.'
-                    : 'El alimento base debe tener al menos 2 caracteres.';
+                    : (campos.alimentoBase && /[0-9]/.test(campos.alimentoBase))
+                        ? 'El alimento base solo puede contener letras, no números.'
+                        : 'El alimento base debe tener al menos 2 letras.';
             } else if (!cantidadValida) {
                 mensaje = `La cantidad debe estar entre ${VALIDATION_RANGES.CANTIDAD_ALIMENTO_KG_DIA.min} y ${VALIDATION_RANGES.CANTIDAD_ALIMENTO_KG_DIA.max} kg/día.`;
             } else if (!suplementosValidos) {
@@ -164,7 +166,7 @@ function DietasSuplementos(){
                     <Entrada label="Alimento Base *" texto="Ej: Pasto estrella, concentrado"
                         value={campos.alimentoBase} onChange={handleChange('alimentoBase')}
                         error={errores.alimentoBase} />
-                    <Entrada label="Cantidad (kg/día) *" texto="Ej: 25" type="number"
+                    <Entrada label="Cantidad (kg/día) *" texto="Ej: 25" type="text" inputMode="decimal"
                         value={campos.cantidad} onChange={handleChange('cantidad')}
                         error={errores.cantidad}
                         min={VALIDATION_RANGES.CANTIDAD_ALIMENTO_KG_DIA.min} max={VALIDATION_RANGES.CANTIDAD_ALIMENTO_KG_DIA.max} step="0.1" />

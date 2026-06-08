@@ -60,6 +60,7 @@ function RegistrarAnimal(){
         const procedenciaValida = isValidFreeText(campos.procedencia);
 
         const esCriaSeleccionada = campos.esCria === 'si';
+        const observacionesValidas = isValidFreeText(campos.observaciones);
         const nuevosErrores = {
             identificacion: !identificacionValida,
             nombre:         !nombreValido,
@@ -71,7 +72,7 @@ function RegistrarAnimal(){
         };
         setErrores(nuevosErrores);
 
-        if (Object.values(nuevosErrores).some(Boolean) || !colorValido || !procedenciaValida) {
+        if (Object.values(nuevosErrores).some(Boolean) || !colorValido || !procedenciaValida || !observacionesValidas) {
             let mensaje = 'No se han ingresado los datos obligatorios.';
             if (!identificacionValida) {
                 mensaje = 'La identificación debe tener exactamente 5 números.';
@@ -93,6 +94,10 @@ function RegistrarAnimal(){
                     : 'La procedencia debe tener al menos 2 caracteres.';
             } else if (esCriaSeleccionada && !campos.madreId) {
                 mensaje = 'Debe seleccionar la madre de la cría.';
+            } else if (!observacionesValidas) {
+                mensaje = hasWhitespaceIssues(campos.observaciones)
+                    ? 'Las observaciones no pueden tener espacios al inicio, al final ni consecutivos.'
+                    : 'Las observaciones deben tener al menos 2 caracteres.';
             }
 
             setToast({ tipo: 'error', titulo: 'Error al registrar el animal', mensaje });
@@ -156,7 +161,7 @@ function RegistrarAnimal(){
                     <Entrada label="Fecha de nacimiento *" texto="dd/mm/aaaa" type="date"
                         value={campos.fechaNacimiento} onChange={handleChange('fechaNacimiento')}
                         error={errores.fechaNacimiento} />
-                    <Entrada label="Peso (kg) *" texto="Ej: 450" type="number"
+                    <Entrada label="Peso (kg) *" texto="Ej: 450" type="text" inputMode="decimal"
                         value={campos.peso} onChange={handleChange('peso')} error={errores.peso}
                         min={VALIDATION_RANGES.PESO_KG.min} max={VALIDATION_RANGES.PESO_KG.max} step="0.1" />
 

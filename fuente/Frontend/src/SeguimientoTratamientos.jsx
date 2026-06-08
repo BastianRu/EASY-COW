@@ -177,7 +177,7 @@ function SeguimientoTratamientos(){
                         value={campos.frecuencia} onChange={handleChange('frecuencia')}
                         error={errores.frecuencia} />
 
-                    <Entrada label="Duración (días) *" texto="Ej: 7" type="number"
+                    <Entrada label="Duración (días) *" texto="Ej: 7" type="text" inputMode="numeric"
                         value={campos.duracion} onChange={handleChange('duracion')}
                         error={errores.duracion}
                         min={VALIDATION_RANGES.DURACION_TRATAMIENTO_DIAS.min} max={VALIDATION_RANGES.DURACION_TRATAMIENTO_DIAS.max} step="1" />

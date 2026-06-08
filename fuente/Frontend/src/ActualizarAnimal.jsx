@@ -174,19 +174,19 @@ function ActualizarAnimal(){
                     </div>
 
                     {campos.animalId && (<>
-                        <Entrada label="Peso actual (kg) *" texto="Ej: 480" type="number"
+                        <Entrada label="Peso actual (kg) *" texto="Ej: 480" type="text" inputMode="decimal"
                             value={campos.peso} onChange={handleChange('peso')} error={errores.peso}
                             min={VALIDATION_RANGES.PESO_KG.min} max={VALIDATION_RANGES.PESO_KG.max} step="0.1" />
-                        <Entrada label="Altura (cm)" texto="Ej: 145.5" type="number"
+                        <Entrada label="Altura (cm)" texto="Ej: 145.5" type="text" inputMode="decimal"
                             value={campos.altura} onChange={handleChange('altura')} error={errores.altura}
                             min={VALIDATION_RANGES.ALTURA_CM.min} max={VALIDATION_RANGES.ALTURA_CM.max} step="0.1" />
 
-                        <Entrada label="Condición corporal (1 a 5)" texto="Ej: 3" type="number"
+                        <Entrada label="Condición corporal (1 a 5)" texto="Ej: 3" type="text" inputMode="decimal"
                             value={campos.condicionCorporal}
                             onChange={handleChange('condicionCorporal')}
                             error={errores.condicionCorporal}
                             min={VALIDATION_RANGES.CONDICION_CORPORAL.min} max={VALIDATION_RANGES.CONDICION_CORPORAL.max} step="0.1" />
-                        <Entrada label="Producción de leche (L/día)" texto="Ej: 18.5" type="number"
+                        <Entrada label="Producción de leche (L/día)" texto="Ej: 18.5" type="text" inputMode="decimal"
                             value={campos.produccionLeche} onChange={handleChange('produccionLeche')} error={errores.produccionLeche}
                             min={VALIDATION_RANGES.PRODUCCION_LECHE_L_DIA.min} max={VALIDATION_RANGES.PRODUCCION_LECHE_L_DIA.max} step="0.1" />
                         <div className="formulario-full">

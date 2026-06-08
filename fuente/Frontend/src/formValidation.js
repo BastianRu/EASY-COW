@@ -33,6 +33,14 @@ export function isNumberInRange(value, { min, max, integer = false, allowEmpty =
         return allowEmpty;
     }
 
+    // Reject strings that aren't valid numbers (e.g. "100-", "1e-2x", "abc")
+    if (typeof value === 'string') {
+        const trimmed = value.trim();
+        if (trimmed === '') return allowEmpty;
+        // Only allow optional leading minus + digits + optional decimal part
+        if (!/^-?\d+(\.\d+)?$/.test(trimmed)) return false;
+    }
+
     const numericValue = Number(value);
     if (!Number.isFinite(numericValue)) return false;
     if (integer && !Number.isInteger(numericValue)) return false;
@@ -49,6 +57,14 @@ export function hasWhitespaceIssues(value) {
 export function isValidFreeText(value, { required = false, minLength = 2 } = {}) {
     if (!value || typeof value !== 'string' || value === '') return !required;
     if (hasWhitespaceIssues(value)) return false;
+    return value.length >= minLength;
+}
+
+// Only letters (including accented), spaces, hyphens — no digits allowed
+export function isLettersOnly(value, { required = false, minLength = 2 } = {}) {
+    if (!value || typeof value !== 'string' || value === '') return !required;
+    if (hasWhitespaceIssues(value)) return false;
+    if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s\-]+$/.test(value)) return false;
     return value.length >= minLength;
 }
 
