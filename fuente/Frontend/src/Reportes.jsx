@@ -86,7 +86,7 @@ const OPCIONES_SEXO = [
     { value: 'macho', label: 'Macho' }, { value: 'hembra', label: 'Hembra' },
 ]
 const OPCIONES_ESTADO_ANIMAL = [
-    { value: 'activo', label: 'Activo' }, { value: 'vendido', label: 'Vendido' }, { value: 'muerto', label: 'Muerto' },
+    { value: 'activo', label: 'Activo' }, { value: 'vendido', label: 'Vendido' },
 ]
 const OPCIONES_ESTADO_ENFERMEDAD = [
     { value: 'activo', label: 'Activo' }, { value: 'recuperado', label: 'Recuperado' }, { value: 'fallecido', label: 'Fallecido' },
