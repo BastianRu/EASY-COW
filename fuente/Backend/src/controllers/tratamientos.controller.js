@@ -46,7 +46,13 @@ const createTratamiento = asyncHandler(async (req, res) => {
     throw new AppError("Animal no encontrado", 404, "NOT_FOUND");
   }
 
-  // Verificar duplicado: mismo animal + mismo medicamento (sin distinción de mayúsculas) + misma fecha
+  if (animal.estado !== "activo") {
+    throw new AppError(
+      "No se puede registrar un tratamiento para un animal que ya fue vendido o dado de baja",
+      400,
+      "BUSINESS_RULE_ERROR"
+    );
+  } mismo animal + mismo medicamento (sin distinción de mayúsculas) + misma fecha
   const { start, end } = normalizeDayRange(fechaInicio);
   const duplicado = await Tratamiento.findOne({
     animalId: animal._id,

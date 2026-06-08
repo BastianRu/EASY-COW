@@ -32,6 +32,14 @@ const createEnfermedad = asyncHandler(async (req, res) => {
     throw new AppError("Animal no encontrado", 404, "NOT_FOUND");
   }
 
+  if (animal.estado !== "activo") {
+    throw new AppError(
+      "No se puede registrar una enfermedad para un animal que ya fue vendido o dado de baja",
+      400,
+      "BUSINESS_RULE_ERROR"
+    );
+  }
+
   const registro = await RegistroEnfermedad.create({
     animalId,
     fechaDeteccion,

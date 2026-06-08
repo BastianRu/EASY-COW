@@ -30,7 +30,7 @@ function SeguimientoTratamientos(){
     useEffect(() => {
         const cargarAnimales = async () => {
             try {
-                const res = await get('/animales');
+                const res = await get('/animales', { estado: 'activo', limit: 200 });
                 setAnimales(res.data);
             } catch (error) {
                 setToast({ tipo: 'error', titulo: 'Error', mensaje: 'No se pudo cargar la lista de animales' });
