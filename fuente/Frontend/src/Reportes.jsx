@@ -89,7 +89,7 @@ const OPCIONES_ESTADO_ANIMAL = [
     { value: 'activo', label: 'Activo' }, { value: 'vendido', label: 'Vendido' },
 ]
 const OPCIONES_ESTADO_ENFERMEDAD = [
-    { value: 'activo', label: 'Activo' }, { value: 'recuperado', label: 'Recuperado' }, { value: 'fallecido', label: 'Fallecido' },
+    { value: 'activo', label: 'Activo' }, 
 ]
 const OPCIONES_ESTADO_TRATAMIENTO = [
     { value: 'en_curso', label: 'En curso' }, { value: 'completado', label: 'Completado' },
