@@ -24,18 +24,4 @@ El proyecto incluye 3 carpetas correspondientes a las ramas:
 - `pruebas/` - Carpeta para pruebas
 
 
-## Comandos para trabajar con las ramas
 
-Para cambiar entre ramas:
-```bash
-git switch documentacion
-git switch pruebas
-git switch fuente
-```
-
-Para subir las ramas al repositorio remoto:
-```bash
-git push origin documentacion
-git push origin fuente
-git push origin pruebas
-```
